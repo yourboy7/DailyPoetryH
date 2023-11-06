@@ -3,4 +3,5 @@
 public interface IPoetryStorage {
     bool IsInitialized { get; }
 
+    Task InitializeAsync();
 }

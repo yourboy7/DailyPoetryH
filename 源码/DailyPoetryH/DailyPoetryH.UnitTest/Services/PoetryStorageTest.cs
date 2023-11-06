@@ -16,8 +16,7 @@ public class PoetryStorageTest {
     }
 
     [Fact]
-    public void IsInitialized_NotInitialized()
-    {
+    public void IsInitialized_NotInitialized() {
         var preferenceStorageMock = new Mock<IPreferenceStorage>();
         preferenceStorageMock
             .Setup(p => p.Get(PoetryStorageConstant.DbVersionKey, 0))
@@ -25,5 +24,17 @@ public class PoetryStorageTest {
         var mockPreferenceStorage = preferenceStorageMock.Object;
         var poetryStorage = new PoetryStorage(mockPreferenceStorage);
         Assert.False(poetryStorage.IsInitialized);
+    }
+
+    [Fact]
+    public async Task InitializeAsync_Default() {
+        var preferenceStorageMock = new Mock<IPreferenceStorage>();
+        var mockPreferenceStorage = preferenceStorageMock.Object;
+
+        var poetryStorage = new PoetryStorage(mockPreferenceStorage);
+
+        Assert.False(File.Exists(PoetryStorage.PoetryDbPath));
+        await poetryStorage.InitializeAsync();
+        Assert.True(File.Exists(PoetryStorage.PoetryDbPath));
     }
 }
